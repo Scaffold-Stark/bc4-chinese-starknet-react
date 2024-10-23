@@ -10,6 +10,7 @@ import {
   useReadContract,
 } from "@starknet-react/core";
 import * as ethContract from "@/contracts/eth";
+import { Input } from "@/components/Input";
 
 export default function Home() {
   const { connect } = useConnect();
@@ -55,6 +56,20 @@ export default function Home() {
             ) : (
               <div>{(Number(data) / 10 ** 18).toString()} ETH</div>
             ))}
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Transfer Eth Demo</CardTitle>
+        </CardHeader>
+        <CardContent className="w-full flex flex-col justify-center">
+          {!isConnected && <div>Wallet not connected</div>}
+          {isConnected && (
+            <>
+              <Input placeholder={"Input transfer amount in ETH"}></Input>
+              <Button className="mt-2">Send</Button>
+            </>
+          )}
         </CardContent>
       </Card>
     </div>
