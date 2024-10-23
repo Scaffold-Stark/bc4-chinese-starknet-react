@@ -1,5 +1,5 @@
 export const address =
-  "0x49D36570D4E46F48E99674BD3FCC84644DDD6B96F7C741B1562B82F9E004DC7" as const;
+  "0x049D36570D4e46f48e99674bd3fcc84644DdD6b96F7C741B1562B82f9e004dC7" as const;
 
 // sepolia
 export const sepolia_classHash =
