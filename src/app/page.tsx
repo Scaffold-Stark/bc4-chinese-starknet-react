@@ -6,16 +6,22 @@ import {
   braavos,
   useAccount,
   useConnect,
+  useContract,
   useDisconnect,
   useReadContract,
+  useSendTransaction,
 } from "@starknet-react/core";
 import * as ethContract from "@/contracts/eth";
 import { Input } from "@/components/Input";
+import { useState } from "react";
 
 export default function Home() {
   const { connect } = useConnect();
   const { disconnect } = useDisconnect();
   const { address, isConnected } = useAccount();
+
+  const [transferAmount, setTransferAmount] = useState(0);
+  const [targetAddress, setTargetAddress] = useState("");
 
   const { data, isLoading } = useReadContract({
     abi: ethContract.abi,
@@ -24,6 +30,12 @@ export default function Home() {
     args: [address],
     enabled: isConnected,
   });
+
+  const { contract } = useContract({
+    ...ethContract,
+  });
+
+  const { sendAsync: sendTransferEthTransaction } = useSendTransaction({});
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
@@ -66,8 +78,33 @@ export default function Home() {
           {!isConnected && <div>Wallet not connected</div>}
           {isConnected && (
             <>
-              <Input placeholder={"Input transfer amount in ETH"}></Input>
-              <Button className="mt-2">Send</Button>
+              <Input
+                type="number"
+                onChange={(e) => setTransferAmount(Number(e.target.value))}
+                step="0.001"
+                placeholder={"Input transfer amount in ETH"}
+              ></Input>
+              <Input
+                onChange={(e) => setTargetAddress(e.target.value)}
+                placeholder={"Input destination address"}
+              ></Input>
+              <Button
+                className="mt-2"
+                onClick={async () => {
+                  await sendTransferEthTransaction([
+                    contract.populate("approve", [
+                      targetAddress,
+                      transferAmount * 10 ** 18,
+                    ]),
+                    contract.populate("transfer", [
+                      targetAddress,
+                      transferAmount * 10 ** 18,
+                    ]),
+                  ]);
+                }}
+              >
+                Send
+              </Button>
             </>
           )}
         </CardContent>
