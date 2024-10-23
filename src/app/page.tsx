@@ -3,7 +3,6 @@
 import { Button } from "@/components/Button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/Card";
 import {
-  argent,
   braavos,
   useAccount,
   useConnect,
@@ -32,6 +31,14 @@ export default function Home() {
             {isConnected ? "Disconnect" : "Connect Wallet"}
           </Button>
           {isConnected && <div>Address: {address}</div>}
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Eth Balance Read Demo</CardTitle>
+        </CardHeader>
+        <CardContent className="w-full flex flex-col justify-center">
+          <div>XXXXXXXX ETH</div>
         </CardContent>
       </Card>
     </div>
